@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sesama Tutoria | Conecte-se com os melhores tutores</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15.0.0/dist/smooth-scroll.polyfills.min.js"></script>
   <style>
     body { font-family: 'Inter', sans-serif; }
   </style>
@@ -269,5 +270,40 @@
     &copy; 2025 Sesama Tutoria. Todos os direitos reservados.
   </footer>
 
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+          const startPosition = window.pageYOffset;
+          const distance = targetPosition - startPosition;
+          const duration = 1000;
+          let start = null;
+          
+          function animation(currentTime) {
+            if (start === null) start = currentTime;
+            const timeElapsed = currentTime - start;
+            const run = ease(timeElapsed, startPosition, distance, duration);
+            window.scrollTo(0, run);
+            if (timeElapsed < duration) requestAnimationFrame(animation);
+          }
+          
+          function ease(t, b, c, d) {
+            t /= d / 2;
+            if (t < 1) return c / 2 * t * t + b;
+            t--;
+            return -c / 2 * (t * (t - 2) - 1) + b;
+          }
+          
+          requestAnimationFrame(animation);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
